@@ -1,4 +1,4 @@
-#include "parser.h"
+#include "include/parser.h"
 
 #include <stdio.h>
 
@@ -9,7 +9,7 @@ void parse(const TokenList* list) {
         const Token* token = &list->tokens[i];
         const Token* nextToken = (i + 1 < list->count) ? &list->tokens[i + 1] : NULL;
 
-        
+
         if(token->type == TOKEN_NUMBER) {
             printf("parsed number: %d\n", token->value);
         } else if (token->type == TOKEN_PLUS) {
