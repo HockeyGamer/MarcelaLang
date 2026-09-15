@@ -7,8 +7,9 @@ void parse(const TokenList* list) {
     
     for(int i = 0; i < list->count; i++) {
         const Token* token = &list->tokens[i];
-        
         const Token* nextToken = (i + 1 < list->count) ? &list->tokens[i + 1] : NULL;
+
+        
         if(token->type == TOKEN_NUMBER) {
             printf("parsed number: %d\n", token->value);
         } else if (token->type == TOKEN_PLUS) {
