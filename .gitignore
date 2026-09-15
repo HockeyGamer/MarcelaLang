@@ -1,3 +1,4 @@
 *.exe
 *.marcela
 compiler
+*.o
