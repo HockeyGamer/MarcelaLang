@@ -5,7 +5,6 @@
 #include "include/ast.h"
 #include "include/codegen.h"
 #include "include/semantic.h"
-#include "assembler/assembler.h"
 
 int main(int argc, char* argv[]) {
 
