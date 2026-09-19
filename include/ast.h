@@ -15,7 +15,9 @@ typedef struct ASTNode {
 } ASTNode;
 
 ASTNode* createNumberNode(int value);
+
 ASTNode* makeBinOpNode(ASTNode* left, ASTNode* right, char op);
+
 void printAST(ASTNode* node, int depth);
 
 #endif // AST_H

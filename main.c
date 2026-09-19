@@ -3,6 +3,9 @@
 
 #include "include/parser.h"
 #include "include/ast.h"
+#include "include/codegen.h"
+#include "include/semantic.h"
+#include "assembler/assembler.h"
 
 int main(int argc, char* argv[]) {
 
@@ -31,7 +34,15 @@ int main(int argc, char* argv[]) {
         printAST(tree, 0);
 
         freeTokenList(&list);
+
+        tree = analyze(tree);
+
+        FILE* out = fopen("out.asm", "w");
+        generateProgram(tree, out);
+        fclose(out);
     }
+
+    system("nasm out.asm -o out.o");
 
     fclose(file);
 
