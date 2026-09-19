@@ -2,3 +2,4 @@
 *.marcela
 compiler
 *.o
+*.asm
