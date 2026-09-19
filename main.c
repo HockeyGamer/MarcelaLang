@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "include/parser.h"
+#include "include/ast.h"
 
 int main(int argc, char* argv[]) {
 
@@ -25,7 +26,9 @@ int main(int argc, char* argv[]) {
         printf("Starting lexer\n");
         TokenList list = lex(buffer);
 
-        parse(&list);
+        ASTNode* tree = parse(&list);
+
+        printAST(tree, 0);
 
         freeTokenList(&list);
     }

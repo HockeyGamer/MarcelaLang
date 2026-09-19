@@ -1,49 +1,55 @@
 #include "include/parser.h"
+#include "include/ast.h"
 
 #include <stdio.h>
-#include <stdbool.h>
+#include <stdlib.h>
 
-
-// this is because theres deadass like 4 tokens rn later I am going to make a way more complicated system so it doesnt become a mess but for now whatever
-static const TokenType allowedAfterNumber[] = {
-    TOKEN_PLUS,
-    TOKEN_EOF
-};
-
-bool allowedAfterToken(const TokenType list[], TokenType tokenType, int listSize) {
-    for (int i = 0; i < listSize; i++) {
-        if (tokenType == list[i]) {
-            return true;
-        }
-    }
-    return false;
+static Token peek(Parser* p) {
+    return p->list->tokens[p->pos];
 }
 
-void parse(const TokenList* list) {
-    printf("Parsing %d tokens\n", list->count);
-    
-    for(int i = 0; i < list->count; i++) {
-        const Token* token = &list->tokens[i];
-        const Token* nextToken = (i + 1 < list->count) ? &list->tokens[i + 1] : NULL;
-        const Token* prevToken = (i - 1 >= 0) ? &list->tokens[i - 1] : NULL;
+static Token advance(Parser* p) {
+    return p->list->tokens[p->pos++];
+}
 
-
-        if(token->type == TOKEN_NUMBER) {
-            printf("parsed number: %d\n", token->value);
-
-            if (nextToken && !allowedAfterToken(allowedAfterNumber, nextToken->type, sizeof(allowedAfterNumber) / sizeof(allowedAfterNumber[0]))) {
-                fprintf(stderr, "Error: Unexpected token after number\n");
-                return;
-            }
-        } else if (token->type == TOKEN_PLUS) {
-            printf("parsed plus\n");
-
-            if (nextToken && nextToken->type == TOKEN_PLUS){
-                fprintf(stderr, "Error: Unexpected token after plus\n");
-                return;
-            }
-        } else if (token->type == TOKEN_EOF) {
-            printf("parsed EOF\n");
-        }
+static Token expect(Parser* p, TokenType type, const char* msg) {
+    if (peek(p).type != type) {
+        fprintf(stderr, "Error: %s\n", msg);
+        exit(1);
     }
+    return advance(p);
+}
+
+ASTNode* parsePrimary(Parser* p) {
+    Token t = peek(p);
+    if (t.type == TOKEN_NUMBER) {
+        advance(p);
+        return createNumberNode(t.value);
+    } // put future types here
+    fprintf(stderr, "Error: Expected a number\n");
+    exit(1);
+}
+
+ASTNode* parseExpression(Parser* p) {
+    ASTNode* left = parsePrimary(p);
+
+    while (peek(p).type == TOKEN_PLUS) {
+        advance(p);
+        ASTNode* right = parsePrimary(p);
+        left = makeBinOpNode(left, right, '+');
+    }
+
+    return left;
+}
+
+ASTNode* parseProgram(Parser* p) {
+    ASTNode* tree = parseExpression(p);
+    expect(p, TOKEN_EOF, "Expected end of input");
+    return tree;
+}
+
+
+ASTNode* parse(const TokenList* list) {
+    Parser p = {list, 0};
+    return parseProgram(&p);
 }

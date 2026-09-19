@@ -5,9 +5,9 @@
 #include <stdlib.h>
 
 void initTokenList(TokenList* list) {
-    list->tokens = malloc(list->capacity * sizeof(Token));
     list->count = 0;
     list->capacity = 8;
+    list->tokens = malloc(list->capacity * sizeof(Token));
 }
 
 void addToken(TokenList* list, Token token) {
