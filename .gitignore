@@ -3,3 +3,6 @@
 compiler
 *.o
 *.asm
+.vscode/
+bin/
+build/

@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
         fclose(out);
     }
 
-    system("nasm out.asm -o out.o");
+    //system("nasm out.asm -o out.o"); // remove comment to compile the assembly
 
     fclose(file);
 
