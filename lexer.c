@@ -49,6 +49,10 @@ Token nextToken(const char* input, int* position) {
         (*position)++;
         return (Token){TOKEN_PLUS, 0};
     }
+    if (c == '-') {
+        (*position)++;
+        return (Token){TOKEN_MINUS, 0};
+    }
     if (c == '\0') {
         return (Token){TOKEN_EOF, 0};
     }
@@ -79,6 +83,10 @@ TokenList lex(const char* input) {
 
             case TOKEN_PLUS:
                 printf("TOKEN: PLUS\n");
+                break;
+            
+            case TOKEN_MINUS:
+                printf("TOKEN: MINUS\n");
                 break;
 
             case TOKEN_EOF:

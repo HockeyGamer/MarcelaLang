@@ -33,10 +33,11 @@ ASTNode* parsePrimary(Parser* p) {
 ASTNode* parseExpression(Parser* p) {
     ASTNode* left = parsePrimary(p);
 
-    while (peek(p).type == TOKEN_PLUS) {
+    while (peek(p).type == TOKEN_PLUS || peek(p).type == TOKEN_MINUS) {
+        char op = (peek(p).type == TOKEN_PLUS) ? '+' : '-';
         advance(p);
         ASTNode* right = parsePrimary(p);
-        left = makeBinOpNode(left, right, '+');
+        left = makeBinOpNode(left, right, op);
     }
 
     return left;

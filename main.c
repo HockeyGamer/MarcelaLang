@@ -7,12 +7,6 @@
 #include "include/codegen.h"
 #include "include/semantic.h"
 
-typedef struct{
-    char* data;
-    size_t size;
-    size_t capacity;
-} DynamicBuffer;
-
 int main(int argc, char* argv[]) {
 
     if (argc != 2) {
@@ -22,8 +16,17 @@ int main(int argc, char* argv[]) {
 
     char* filename = argv[1];
 
-    char buffer[1024];
     FILE* file = fopen(filename, "r");
+
+    fseek(file, 0, SEEK_END);
+    long size = ftell(file);
+    rewind(file);
+
+    char* buffer = malloc(size + 1);
+
+    fread(buffer, size, 1, file);
+    buffer[size] = '\0';
+
     if (file == NULL) {
         fprintf(stderr, "Error opening file: %s\n", filename);
         return 1;
@@ -31,24 +34,24 @@ int main(int argc, char* argv[]) {
 
     printf("File opened successfully: %s\n", filename);
 
-    while (fgets(buffer, sizeof(buffer), file) != NULL) {
-        printf("Starting lexer\n");
-        TokenList list = lex(buffer);
+    fread(buffer, 1, size, file);
+    
+    printf("Starting lexer\n");
+    TokenList list = lex(buffer);
 
-        ASTNode* tree = parse(&list);
+    ASTNode* tree = parse(&list);
 
-        printAST(tree, 0);
+    printAST(tree, 0);
 
-        freeTokenList(&list);
+    freeTokenList(&list);
 
-        tree = analyze(tree);
+    tree = analyze(tree);
 
-        FILE* out = fopen("out.asm", "w");
-        generateProgram(tree, out);
-        fclose(out);
+    FILE* out = fopen("out.asm", "w");
+    generateProgram(tree, out);
+    fclose(out);
 
-        free(tree);
-    }
+    free(tree);
 
     //system("nasm out.asm -o out.o"); // remove comment to compile the assembly
 

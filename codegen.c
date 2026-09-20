@@ -10,6 +10,8 @@ void codegen(ASTNode* node, FILE* out){
         fprintf(out, "    pop ebx\n");
         if (node->op == '+') {
             fprintf(out, "    add eax, ebx\n");
+        } else if (node->op == '-') {
+            fprintf(out, "    sub eax, ebx\n");
         }
     }
 }
