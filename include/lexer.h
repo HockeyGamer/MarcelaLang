@@ -1,6 +1,8 @@
 #ifndef LEXER_H
 #define LEXER_H
 
+#include <stddef.h>
+
 typedef enum {
     TOKEN_NUMBER,
     TOKEN_PLUS,
@@ -15,8 +17,8 @@ typedef struct {
 
 typedef struct {
     Token* tokens;
-    int count;
-    int capacity;
+    size_t count;
+    size_t capacity;
 } TokenList;
 
 // Function prototypes for the lexer

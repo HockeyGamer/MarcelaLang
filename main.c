@@ -6,6 +6,12 @@
 #include "include/codegen.h"
 #include "include/semantic.h"
 
+typedef struct{
+    char* data;
+    size_t size;
+    size_t capacity;
+} DynamicBuffer;
+
 int main(int argc, char* argv[]) {
 
     if (argc != 2) {
@@ -39,6 +45,8 @@ int main(int argc, char* argv[]) {
         FILE* out = fopen("out.asm", "w");
         generateProgram(tree, out);
         fclose(out);
+
+        free(tree);
     }
 
     //system("nasm out.asm -o out.o"); // remove comment to compile the assembly
