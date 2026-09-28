@@ -17,12 +17,16 @@ void codegen(ASTNode* node, FILE* out){
 }
 
 void generateProgram(ASTNode* tree, FILE* out) {
-    fprintf(out, "section .text\n");
-    fprintf(out, "global _start\n");
-    fprintf(out, "_start:\n");
-    codegen(tree, out);
-    fprintf(out, "    ; Exit the program\n");
-    fprintf(out, "    mov ebx, eax\n");
-    fprintf(out, "    mov eax, 1\n");
-    fprintf(out, "    int 0x80\n");
+    #ifdef __linux__
+        fprintf(out, "section .text\n");
+        fprintf(out, "global _start\n");
+        fprintf(out, "_start:\n");
+        codegen(tree, out);
+        fprintf(out, "    ; Exit the program\n");
+        fprintf(out, "    mov ebx, eax\n");
+        fprintf(out, "    mov eax, 1\n");
+        fprintf(out, "    int 0x80\n");
+    #else
+        fprintf(stderr, "Compiler only supports linux at the time");
+    #endif
 }
