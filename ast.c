@@ -12,7 +12,7 @@ ASTNode* createNumberNode(int value) {
 
 ASTNode* makeBinOpNode(ASTNode* left, ASTNode* right, char op) {
     ASTNode* node = malloc(sizeof(ASTNode));
-    node-> type = NODE_BINOP;
+    node->type = NODE_BINOP;
     node->op = op;
     node->left = left;
     node->right = right;

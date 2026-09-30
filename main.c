@@ -12,7 +12,7 @@
 int main(int argc, char* argv[]) {
 
     if (argc < 2) {
-        fprintf(stderr, "Usage: %s <directory>\n", argv[0]);
+        fprintf(stderr, "Usage: marcela_compiler [-s] <file>");
         return 1;
     }
 
@@ -54,13 +54,12 @@ int main(int argc, char* argv[]) {
     fread(buffer, size, 1, file);
     buffer[size] = '\0';
 
-
     printf("File opened successfully: %s\n", inputFile);
-
-    fread(buffer, 1, size, file);
     
     printf("Starting lexer\n");
     TokenList list = lex(buffer);
+
+    free(buffer);
 
     ASTNode* tree = parse(&list);
 

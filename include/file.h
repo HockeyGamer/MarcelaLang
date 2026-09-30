@@ -12,4 +12,4 @@
     #define fileTell ftello
 #endif
 
-#endif // LEXER_H
+#endif // FILE_H

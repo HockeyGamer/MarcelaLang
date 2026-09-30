@@ -13,10 +13,12 @@ void initTokenList(TokenList* list) {
 void addToken(TokenList* list, Token token) {
     if (list->count >= list->capacity) {
         list->capacity *= 2;
-        list->tokens = realloc(
-            list->tokens,
-            list->capacity * sizeof(Token)
-        );
+        Token* next_tokens = realloc(list->tokens, list->capacity * sizeof(Token));
+
+        if(next_tokens == NULL) {
+            return;
+        }
+        list->tokens = next_tokens;
     }
     list->tokens[list->count] = token;
     list->count++;
