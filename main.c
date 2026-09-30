@@ -1,7 +1,6 @@
 // I love you marcela <3
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <string.h>
 
 #include "include/parser.h"
@@ -80,7 +79,7 @@ int main(int argc, char* argv[]) {
 
     system("nasm out.asm -o out.o");
 
-        if(!giveAssembly) {
+    if(!giveAssembly) {
         if (remove("out.asm") != 0) {
              perror("Error deleting file");
         }
