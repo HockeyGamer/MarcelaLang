@@ -76,8 +76,6 @@ int main(int argc, char* argv[]) {
 
     free(tree);
 
-    system("nasm out.asm -o out.o");
-
     if(!giveAssembly) {
         if (remove("out.asm") != 0) {
              perror("Error deleting file");

@@ -30,13 +30,26 @@ ASTNode* parsePrimary(Parser* p) {
     exit(1);
 }
 
-ASTNode* parseExpression(Parser* p) {
+ASTNode* parseTerm(Parser* p) {
     ASTNode* left = parsePrimary(p);
+
+    while (peek(p).type == TOKEN_STAR || peek(p).type == TOKEN_SLASH) {
+        char op = (peek(p).type == TOKEN_STAR) ? '*' : '/';
+        advance(p);
+        ASTNode* right = parsePrimary(p);
+        left = makeBinOpNode(left, right, op);
+    }
+
+    return left;
+}
+
+ASTNode* parseExpression(Parser* p) {
+    ASTNode* left = parseTerm(p);
 
     while (peek(p).type == TOKEN_PLUS || peek(p).type == TOKEN_MINUS) {
         char op = (peek(p).type == TOKEN_PLUS) ? '+' : '-';
         advance(p);
-        ASTNode* right = parsePrimary(p);
+        ASTNode* right = parseTerm(p);
         left = makeBinOpNode(left, right, op);
     }
 

@@ -13,12 +13,12 @@ void initTokenList(TokenList* list) {
 void addToken(TokenList* list, Token token) {
     if (list->count >= list->capacity) {
         list->capacity *= 2;
-        Token* next_tokens = realloc(list->tokens, list->capacity * sizeof(Token));
+        Token* nextTokens = realloc(list->tokens, list->capacity * sizeof(Token));
 
-        if(next_tokens == NULL) {
+        if(nextTokens == NULL) {
             return;
         }
-        list->tokens = next_tokens;
+        list->tokens = nextTokens;
     }
     list->tokens[list->count] = token;
     list->count++;
@@ -51,11 +51,19 @@ Token nextToken(const char* input, int* position) {
         (*position)++;
         return (Token){TOKEN_PLUS, 0};
     }
-    if (c == '-') {
+    else if (c == '-') {
         (*position)++;
         return (Token){TOKEN_MINUS, 0};
     }
-    if (c == '\0') {
+    else if (c == '*') {
+        (*position)++;
+        return (Token){TOKEN_STAR, 0};
+    }
+    else if (c == '/') {
+        (*position)++;
+        return (Token){TOKEN_SLASH, 0};
+    }
+    else if (c == '\0') {
         return (Token){TOKEN_EOF, 0};
     }
 
