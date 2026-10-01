@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "include/x86.h"
 
 void bufferPush(ByteBuffer* b, unsigned char byte) {
@@ -32,7 +34,7 @@ void emitPushEax(ByteBuffer* b) {
 }
 
 void emitPopEbx(ByteBuffer* b) {
-    bufferPush(b, 0x58); // opcode for pop ebx
+    bufferPush(b, 0x5B); // opcode for pop ebx
     if (b->listing) fprintf(b->listing, "pop ebx\n");
 }
 
@@ -68,6 +70,11 @@ void emitImulEaxEbx(ByteBuffer* b) {
 
 void emitIdivEbx(ByteBuffer* b) {
     bufferPush(b, 0xF7); // opcode for idiv ebx
-    bufferPush(b, 0xF3);
+    bufferPush(b, 0xFB);
     if (b->listing) fprintf(b->listing, "idiv ebx\n");
+}
+
+void emitCdq(ByteBuffer* b) {
+    bufferPush(b, 0x99); // opcode for cdq
+    if (b->listing) fprintf(b->listing, "cdq\n");
 }

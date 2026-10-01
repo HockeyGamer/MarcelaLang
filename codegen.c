@@ -1,30 +1,32 @@
 #include "include/codegen.h"
 #include "include/x86.h"
 
-void codegen(ASTNode* node, FILE* out, ByteBuffer* buffer) {
+void codegen(ASTNode* node, ByteBuffer* buffer) {
     if (node->type == NODE_NUMBER) {
-        emitMovEaxImm(&buffer, node->value);
+        emitMovEaxImm(buffer, node->value);
     } else if  (node->type == NODE_BINOP) {
-        codegen(node->left, out, buffer);
-        emitPushEax(&buffer);
-        codegen(node->right, out, buffer);
-        emitPopEbx(&buffer);
+        codegen(node->left, buffer);
+        emitPushEax(buffer);
+        codegen(node->right, buffer);
+        emitPopEbx(buffer);
         if (node->op == '+') {
-            emitAddEaxEbx(&buffer);
+            emitAddEaxEbx(buffer);
         } else if (node->op == '-') {
-            emitSubEaxEbx(&buffer);
+            emitXchgEaxEbx(buffer);
+            emitSubEaxEbx(buffer);
         } else if (node->op == '*') {
-            emitImulEaxEbx(&buffer);
+            emitImulEaxEbx(buffer);
         } else if (node->op == '/') {
-            emitXchgEaxEbx(&buffer);
-            emitMovEdxEax(&buffer, 0);
-            emitIdivEbx(&buffer);
+            emitXchgEaxEbx(buffer);
+            emitCdq(buffer);
+            emitIdivEbx(buffer);
         }
     }
 }
 
-void generateProgram(ASTNode* tree, FILE* out, ByteBuffer* buffer) {
-    #ifdef __linux__
+void generateProgram(ASTNode* tree, ByteBuffer* buffer) {
+    codegen(tree, buffer);
+    /*#ifdef __linux__
         fprintf(out, "section .text\n");
         fprintf(out, "global _start\n");
         fprintf(out, "_start:\n");
@@ -35,5 +37,5 @@ void generateProgram(ASTNode* tree, FILE* out, ByteBuffer* buffer) {
         fprintf(out, "    int 0x80\n");
     #else
         fprintf(stderr, "Compiler only supports linux at the time");
-    #endif
-}
+    #endif */
+}// this is just here for future reference

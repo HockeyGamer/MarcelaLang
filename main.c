@@ -8,6 +8,7 @@
 #include "include/codegen.h"
 #include "include/semantic.h"
 #include "include/file.h"
+#include "include/x86.h"
 
 int main(int argc, char* argv[]) {
 
@@ -69,18 +70,22 @@ int main(int argc, char* argv[]) {
 
     tree = analyze(tree);
 
-    FILE* out = fopen("out.asm", "w");
-    generateProgram(tree, out);
+    ByteBuffer byteBuffer = {0};
 
+    if (giveAssembly){
+        byteBuffer.listing = fopen("out.asm", "w");
+    }
+
+    generateProgram(tree, &byteBuffer);
+
+    FILE* out = fopen("out.bin", "wb");
+    fwrite(byteBuffer.data, 1, byteBuffer.size, out);
     fclose(out);
 
-    free(tree);
+    if(byteBuffer.listing) fclose(byteBuffer.listing);
+    free(byteBuffer.data);
 
-    if(!giveAssembly) {
-        if (remove("out.asm") != 0) {
-             perror("Error deleting file");
-        }
-    }
+    free(tree);
 
     fclose(file);
 

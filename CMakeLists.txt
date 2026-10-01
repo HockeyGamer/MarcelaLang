@@ -12,6 +12,7 @@ add_executable(marcela_compiler
     ast.c
     codegen.c
     semantic.c
+    x86.c
 )
 
 target_include_directories(marcela_compiler PRIVATE include)

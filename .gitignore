@@ -6,3 +6,4 @@ compiler
 .vscode/
 bin/
 build/
+*.bin

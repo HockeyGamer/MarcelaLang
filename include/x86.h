@@ -20,5 +20,6 @@ void emitRet(ByteBuffer* b);
 void emitXchgEaxEbx(ByteBuffer* b);
 void emitImulEaxEbx(ByteBuffer* b);
 void emitIdivEbx(ByteBuffer* b);
+void emitCdq(ByteBuffer* b);
 
 #endif // x86_H
