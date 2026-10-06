@@ -1,31 +1,39 @@
 #include "include/codegen.h"
 #include "include/x86.h"
 
-void codegen(ASTNode* node, ByteBuffer* buffer) {
+void codegen(ASTNode* node, ByteBuffer* b) {
     if (node->type == NODE_NUMBER) {
-        emitMovEaxImm(buffer, node->value);
+        Operand dest = {.type = OPERAND_REG, .reg = REG_EAX};
+        Operand src = {.type = OPERAND_IMM, .immValue = node->value};
+        assemble("mov", dest, src, b);
     } else if  (node->type == NODE_BINOP) {
-        codegen(node->left, buffer);
-        emitPushEax(buffer);
-        codegen(node->right, buffer);
-        emitPopEbx(buffer);
+        codegen(node->left, b);
+
+        Operand eaxOp = {.type = OPERAND_REG, .reg = REG_EAX};
+        assemble("push", eaxOp, (Operand){0}, b);
+
+        codegen(node->right, b);
+
+        Operand ebxOp = {.type = OPERAND_REG, .reg = REG_EBX};
+        assemble("mov", ebxOp, (Operand){0}, b);
+
+        assemble("pop", eaxOp, (Operand){0}, b);
+
         if (node->op == '+') {
-            emitAddEaxEbx(buffer);
+            assemble("add", eaxOp, ebxOp, b);
         } else if (node->op == '-') {
-            emitXchgEaxEbx(buffer);
-            emitSubEaxEbx(buffer);
+            assemble("sub", eaxOp, ebxOp, b);
         } else if (node->op == '*') {
-            emitImulEaxEbx(buffer);
+            assemble("imul", eaxOp, ebxOp, b);
         } else if (node->op == '/') {
-            emitXchgEaxEbx(buffer);
-            emitCdq(buffer);
-            emitIdivEbx(buffer);
+            assemble("cdq", (Operand){0}, (Operand){0}, b);
+            assemble("idiv", ebxOp, (Operand){0}, b);
         }
     }
 }
 
-void generateProgram(ASTNode* tree, ByteBuffer* buffer) {
-    codegen(tree, buffer);
+void generateProgram(ASTNode* tree, ByteBuffer* b) {
+    codegen(tree, b);
     /*#ifdef __linux__
         fprintf(out, "section .text\n");
         fprintf(out, "global _start\n");

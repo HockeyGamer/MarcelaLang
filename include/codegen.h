@@ -1,10 +1,20 @@
 #ifndef CODEGEN_H
 #define CODEGEN_H
 
-#include "ast.h"
-#include "x86.h"
+#include <stdint.h>
 #include <stdio.h>
 
-void generateProgram(ASTNode* tree, ByteBuffer* buffer);
+#include "ast.h"
+
+
+typedef struct {
+    uint8_t* data;
+    size_t size;
+    size_t capacity;
+    FILE* listing;
+} ByteBuffer;
+
+
+void generateProgram(ASTNode* tree, ByteBuffer* b);
 
 #endif // CODEGEN_H

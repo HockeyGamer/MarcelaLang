@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    char* inputFile = argv[1];
+    char* inputFile;
     bool giveAssembly = false;
 
     for(int i = 0; i < argc; i++) {

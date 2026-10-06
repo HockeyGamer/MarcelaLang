@@ -3,23 +3,51 @@
 
 #include <stddef.h>
 #include <stdio.h>
+#include <stdint.h>
+
+#include "codegen.h"
+
+typedef enum {
+    REG_EAX = 0,
+    REG_ECX = 1,
+    REG_EDX = 2,
+    REG_EBX = 3,
+    REG_ESP = 4,
+    REG_EBP = 5,
+    REG_ESI = 6,
+    REG_EDI = 7
+} x86Reg;
+
+typedef enum {
+    OPERAND_REG,
+    OPERAND_MEM,
+    OPERAND_IMM
+} OperandType;
 
 typedef struct {
-    unsigned char* data;
-    size_t size;
-    size_t capacity;
-    FILE* listing;
-} ByteBuffer;
+    OperandType type;
+    uint8_t reg;
+    uint32_t immValue;
+} Operand;
 
-void emitMovEaxImm(ByteBuffer* b, int value);
-void emitPushEax(ByteBuffer* b);
-void emitPopEbx(ByteBuffer* b);
-void emitAddEaxEbx(ByteBuffer* b);
-void emitSubEaxEbx(ByteBuffer* b);
-void emitRet(ByteBuffer* b);
-void emitXchgEaxEbx(ByteBuffer* b);
-void emitImulEaxEbx(ByteBuffer* b);
-void emitIdivEbx(ByteBuffer* b);
-void emitCdq(ByteBuffer* b);
 
+typedef enum {
+    FORM_REG_REG,
+    FORM_REG_IMM32,
+    FORM_REG_MEM,
+    FORM_MEM_REG,
+    FORM_MEM_IMM32,
+    FORM_IMM32_REG,
+    FORM_IMM32_MEM,
+    FORM_NONE
+} FormatType;
+
+typedef struct {
+    const char* name;
+    FormatType format;
+    uint8_t baseOpcode;
+} OpcodeEntry;
+
+
+void assemble(const char* name, Operand dest, Operand src, ByteBuffer* b);
 #endif // x86_H
