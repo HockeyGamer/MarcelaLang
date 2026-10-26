@@ -3,7 +3,8 @@
 
 typedef enum {
     NODE_NUMBER,
-    NODE_BINOP
+    NODE_BINOP,
+    NODE_UNARY
 } NodeType;
 
 typedef struct ASTNode {

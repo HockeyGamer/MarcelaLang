@@ -34,7 +34,7 @@ ASTNode* parseTerm(Parser* p) {
     ASTNode* left = parsePrimary(p);
 
     while (peek(p).type == TOKEN_STAR || peek(p).type == TOKEN_SLASH) {
-        char op = (peek(p).type == TOKEN_STAR) ? '*' : '/';
+        char op = (peek(p).type == TOKEN_STAR) ? '*' : (peek(p).type == TOKEN_SLASH) ? '/' : '%';
         advance(p);
         ASTNode* right = parsePrimary(p);
         left = makeBinOpNode(left, right, op);

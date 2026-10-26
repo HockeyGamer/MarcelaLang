@@ -27,7 +27,7 @@ typedef enum {
 
 typedef struct {
     OperandType type;
-    uint8_t reg;
+    x86Reg reg;
     uint32_t immValue;
 } Operand;
 
@@ -40,6 +40,7 @@ typedef enum {
     FORM_MEM_IMM32,
     FORM_IMM32_REG,
     FORM_IMM32_MEM,
+    FORM_REG_NONE,
     FORM_NONE
 } FormatType;
 

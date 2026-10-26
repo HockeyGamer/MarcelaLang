@@ -13,9 +13,9 @@ OpcodeEntry opcodeTable[] = {
     {"add", FORM_REG_REG, 0x01},
     {"sub", FORM_REG_REG, 0x29},
     {"imul", FORM_REG_REG, 0x0F},
-    {"idiv", FORM_REG_REG, 0xF7},
-    {"push", FORM_REG_REG, 0x50},
-    {"pop", FORM_REG_REG, 0x58},
+    {"idiv", FORM_REG_NONE, 0xF7},
+    {"push", FORM_REG_NONE, 0x50},
+    {"pop", FORM_REG_NONE, 0x58},
     {"cdq", FORM_NONE, 0x99},
     {NULL, FORM_NONE, 0} // Sentinel value to mark the end of the table
 };
@@ -64,6 +64,8 @@ void assemble(const char* name, Operand dest, Operand src, ByteBuffer* b) {
         currentFormat = FORM_REG_REG;
     } else if (dest.type == OPERAND_REG && src.type == OPERAND_IMM) {
         currentFormat = FORM_REG_IMM32;
+    } else if (dest.type == OPERAND_REG && src.type == OPERAND_NONE) {
+        currentFormat = FORM_REG_NONE;
     }
 
     for(int i = 0; opcodeTable[i].name != NULL; i++) {
@@ -81,7 +83,7 @@ void assemble(const char* name, Operand dest, Operand src, ByteBuffer* b) {
 
 
             if (b->listing != NULL) {
-                fprintf(b->listing, "    %s ", name);
+                fprintf(b->listing, "%s ", name);
 
                 if (currentFormat == FORM_REG_REG || currentFormat == FORM_REG_IMM32) {
                     printOperand(b->listing, dest);
