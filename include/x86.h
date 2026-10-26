@@ -19,9 +19,10 @@ typedef enum {
 } x86Reg;
 
 typedef enum {
+    OPERAND_NONE,
     OPERAND_REG,
     OPERAND_MEM,
-    OPERAND_IMM
+    OPERAND_IMM,
 } OperandType;
 
 typedef struct {

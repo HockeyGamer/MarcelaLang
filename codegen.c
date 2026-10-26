@@ -10,14 +10,14 @@ void codegen(ASTNode* node, ByteBuffer* b) {
         codegen(node->left, b);
 
         Operand eaxOp = {.type = OPERAND_REG, .reg = REG_EAX};
-        assemble("push", eaxOp, (Operand){0}, b);
+        assemble("push", eaxOp, (Operand){1}, b);
 
         codegen(node->right, b);
 
         Operand ebxOp = {.type = OPERAND_REG, .reg = REG_EBX};
-        assemble("mov", ebxOp, (Operand){0}, b);
+        assemble("mov", ebxOp, (Operand){1}, b);
 
-        assemble("pop", eaxOp, (Operand){0}, b);
+        assemble("pop", eaxOp, (Operand){1}, b);
 
         if (node->op == '+') {
             assemble("add", eaxOp, ebxOp, b);
@@ -27,7 +27,7 @@ void codegen(ASTNode* node, ByteBuffer* b) {
             assemble("imul", eaxOp, ebxOp, b);
         } else if (node->op == '/') {
             assemble("cdq", (Operand){0}, (Operand){0}, b);
-            assemble("idiv", ebxOp, (Operand){0}, b);
+            assemble("idiv", ebxOp, (Operand){1}, b);
         }
     }
 }

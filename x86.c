@@ -13,7 +13,7 @@ OpcodeEntry opcodeTable[] = {
     {"add", FORM_REG_REG, 0x01},
     {"sub", FORM_REG_REG, 0x29},
     {"imul", FORM_REG_REG, 0x0F},
-    {"idiv", FORM_NONE, 0xF7},
+    {"idiv", FORM_REG_REG, 0xF7},
     {"push", FORM_REG_REG, 0x50},
     {"pop", FORM_REG_REG, 0x58},
     {"cdq", FORM_NONE, 0x99},
@@ -70,7 +70,6 @@ void assemble(const char* name, Operand dest, Operand src, ByteBuffer* b) {
         if (strcmp(opcodeTable[i].name, name) == 0 && opcodeTable[i].format == currentFormat) {
             uint8_t base = opcodeTable[i].baseOpcode;
 
-
             if (currentFormat == FORM_REG_REG) {
                 bufferPush(b, base);
                 uint8_t modrm = (0x3 << 6) | (src.reg << 3) | dest.reg;
@@ -82,7 +81,7 @@ void assemble(const char* name, Operand dest, Operand src, ByteBuffer* b) {
 
 
             if (b->listing != NULL) {
-                fprintf(b->listing, "    %s", name);
+                fprintf(b->listing, "    %s ", name);
 
                 if (currentFormat == FORM_REG_REG || currentFormat == FORM_REG_IMM32) {
                     printOperand(b->listing, dest);
